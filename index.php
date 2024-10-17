@@ -5,6 +5,7 @@
 // GET - http://localhost:8000/status (to see the current game state)
 // POST - http://localhost:8000/move/1/3 (to move a disk from peg 1 to peg 3)
 // POST - http://localhost:8000/reset (to start over)
+// All code documentation and documentaries were generated with AI to better clarify
 
 session_start(); // Let's remember stuff between requests!
 
