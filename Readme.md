@@ -31,7 +31,12 @@ The objective of the game is to move the entire stack to the last rod, obeying t
    cd tower-of-hanoi
    ```
 
-3. Start the PHP server:
+3. Install dependencies using Composer:
+   ```
+   composer install
+   ```
+
+4. Start the PHP server:
    ```
    php -S localhost:8000
    ```
@@ -78,6 +83,32 @@ You can use cURL in your terminal to interact with the game:
    curl -X POST http://localhost:8000/reset
    ```
 
+## 🔍 PHPStan
+
+This project uses PHPStan for static code analysis. PHPStan helps detect errors and potential issues in the code without actually running it.
+
+### Configuration
+
+We use a PHPStan configuration file (`phpstan.neon`) with the following content:
+
+```yaml
+parameters:
+    level: 5
+    paths:
+        - game.php
+```
+
+### Why Level 5?
+
+1. **Balance**: Level 5 offers a good balance between strictness and practicality. It's rigorous enough to catch many common errors but not so strict that it generates many false positives.
+
+2. **Type Checking**: At level 5, PHPStan starts checking types in method calls and function returns, which can catch many subtle type-related errors.
+
+3. **Gradual Adoption**: Starting at level 5 allows us to catch important issues while leaving room for increasing strictness in the future as the codebase becomes more robust.
+
+4. **Project Compatibility**: For this project, which may not have complete type annotations, level 5 provides valuable insights without being overly restrictive.
+
+Remember, the goal of static analysis is to improve code quality and robustness. Level 5 helps us achieve this goal without creating unnecessary obstacles in the development process.
 
 ## Documentation
 All code documentation and documentaries were generated with AI to better clarify
