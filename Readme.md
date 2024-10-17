@@ -77,3 +77,7 @@ You can use cURL in your terminal to interact with the game:
    ```
    curl -X POST http://localhost:8000/reset
    ```
+
+
+## Documentation
+All code documentation and documentaries were generated with AI to better clarify
