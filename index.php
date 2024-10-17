@@ -7,6 +7,8 @@
 // POST - http://localhost:8000/reset (to start over)
 // All code documentation and documentaries were generated with AI to better clarify
 
+declare(strict_types=1);
+
 session_start(); // Let's remember stuff between requests!
 
 // If we're just starting, let's set up the game
@@ -24,34 +26,34 @@ function getState() {
     return json_encode([
         'state' => $_SESSION['state'],
         'isFinished' => $_SESSION['isCompleted']
-    ]);
+    ], JSON_THROW_ON_ERROR);
 }
 
 // This is where the magic happens - moving disks around!
-function move($from, $to) {
+function move(int $from, int $to): string {
     $from--; // We're using 1, 2, 3 for pegs, but arrays start at 0
     $to--;   // So we need to subtract 1
     
     // Game over? No more moves!
     if ($_SESSION['isCompleted']) {
-        return json_encode(['error' => 'The game has already finished']);
+        return json_encode(['error' => 'The game has already finished'], JSON_THROW_ON_ERROR);
     }
     
     // Oops, trying to use a non-existent peg?
     if ($from < 0 || $from > 2 || $to < 0 || $to > 2) {
-        return json_encode(['error' => 'Invalid peg']);
+        return json_encode(['error' => 'Invalid peg'], JSON_THROW_ON_ERROR);
     }
     
     // Can't move a disk that isn't there!
     if (empty($_SESSION['state'][$from])) {
-        return json_encode(['error' => 'No disk on the source peg']);
+        return json_encode(['error' => 'No disk on the source peg'], JSON_THROW_ON_ERROR);
     }
     
     $disk = $_SESSION['state'][$from][0]; // The disk we're trying to move
     
     // No putting big disks on little disks!
     if (!empty($_SESSION['state'][$to]) && $_SESSION['state'][$to][0] < $disk) {
-        return json_encode(['error' => 'Cannot place a larger disk on top of a smaller one']);
+        return json_encode(['error' => 'Cannot place a larger disk on top of a smaller one'], JSON_THROW_ON_ERROR);
     }
     
     // Move the disk from one peg to another
@@ -60,7 +62,7 @@ function move($from, $to) {
     // Did we just win? Let's check!
     $_SESSION['isCompleted'] = (count($_SESSION['state'][2]) == 7);
     
-    return json_encode(['message' => 'Move successful']);
+    return json_encode(['message' => 'Move successful'], JSON_THROW_ON_ERROR);
 }
 
 // Let's figure out what the player wants to do
@@ -82,9 +84,9 @@ if ($uri == '/status' && $method == 'GET') {
         []
     ];
     $_SESSION['isCompleted'] = false;
-    echo json_encode(['message' => 'Game reset successfully']);
+    echo json_encode(['message' => 'Game reset successfully'], JSON_THROW_ON_ERROR);
 } else {
     // Uh oh, we don't know what they want
     http_response_code(404);
-    echo json_encode(['error' => 'Endpoint not found']);
+    echo json_encode(['error' => 'Endpoint not found'], JSON_THROW_ON_ERROR);
 }
